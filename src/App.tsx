@@ -92,10 +92,10 @@ const loadAll = async () => {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = migrate(JSON.parse(raw));
-      if (Object.keys(parsed.entries || {}).length > 0) return parsed;
+      return parsed;
     }
   } catch(e) { console.error('load error:', e); }
-  return { entries: SEED_ENTRIES(), meta: { recentTags: [] } };
+  return { entries: {}, meta: { recentTags: [] } };
 };
 
 const saveAll = async (data) => {
@@ -109,101 +109,6 @@ const saveAll = async (data) => {
  * 计算相对今天的日期
  * @param daysAgo 几天前，0=今天，1=昨天
  */
-const daysAgoStr = (daysAgo) => {
-  const d = new Date();
-  d.setDate(d.getDate() - daysAgo);
-  return toStr(d);
-};
-
-/* 每篇日记的简易构造器 */
-const makeBlock = (content, kind='none', done=false) => ({
-  id: uid(),
-  type: 'text',
-  content,
-  marker: { kind },
-  done,
-});
-
-const SEED_ENTRIES = () => {
-  const entries = {};
-
-  // 今天
-  entries[daysAgoStr(0)] = {
-    date: daysAgoStr(0),
-    did: [
-      makeBlock('体验并测试两款新的 AI 效率工具', 'check', true),
-      makeBlock('小程序第一版意见修改', 'check', true),
-      makeBlock('晚上去打一小时网球', 'check', false),
-      makeBlock('买猫粮', 'check', false),
-    ],
-    thoughts: [
-      makeBlock('很多时候设计的瓶颈不在于技法，而在于眼界。今天试用新工具时，越发觉得现在的技术真的是在给创造力松绑。只要有好的审美和清晰的逻辑，工具能帮你省去大部分的纯体力活。'),
-      makeBlock('晚上收拾屋子，顺便断舍离扔掉一批旧衣服。生活和做界面一样，留白才能凸显重点。'),
-    ],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  };
-
-  // 昨天
-  entries[daysAgoStr(1)] = {
-    date: daysAgoStr(1),
-    did: [
-      makeBlock('提交项目的视觉二稿 发客户', 'check', true),
-      makeBlock('研究 Tauri，想把日记app打包成桌面版', 'check', true),
-      makeBlock('整理户外装备', 'check', true),
-    ],
-    thoughts: [
-      makeBlock('客户的反馈比预期要顺利。其实前期多花点时间对齐需求和视觉基调，后期的沟通成本真的会大幅度降低。不要怕前期麻烦。'),
-      makeBlock('晚上出门骑车兜了一圈，风吹着非常舒服。脱离屏幕，重新去感受真实的物理世界，是对抗数字焦虑最有效的方法。'),
-    ],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  };
-
-  // 5天前
-  entries[daysAgoStr(5)] = {
-    date: daysAgoStr(5),
-    did: [
-      makeBlock('下午和以前的同事喝咖啡聊聊近况', 'check', true),
-      makeBlock('安排五一徒步的路线规划', 'check', true),
-    ],
-    thoughts: [
-      makeBlock('下午聊到了关于职业发展的事，其实无论是在大厂里卷，还是出来做点自己的事情，底层逻辑没有变，核心竞争力永远是“解决复杂问题的能力”和“稳定的情绪”。'),
-    ],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  };
-
-  // 10天前
-  entries[daysAgoStr(10)] = {
-    date: daysAgoStr(10),
-    did: [
-      makeBlock('陪猫去医院打疫苗', 'check', true),
-      makeBlock('咖啡店项目 v1 交付', 'check', true),
-    ],
-    thoughts: [
-      makeBlock('猫在诊室里瑟瑟发抖。原来我们都一样——在熟悉的地方张牙舞爪，在陌生的地方瑟瑟发抖。'),
-    ],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  };
-
-  // 18天前
-  entries[daysAgoStr(18)] = {
-    date: daysAgoStr(18),
-    did: [
-      makeBlock('开始学 Claude Code', 'check', true),
-      makeBlock('整理这一年接的私活清单', 'check', true),
-    ],
-    thoughts: [
-      makeBlock('这一年居然接了 11 个私活，比我以为的多很多。我们对自己的评价，常常比真实情况更苛刻。'),
-    ],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  };
-
-  return entries;
-};
 
 /* ---------- global style ---------- */
 const GlobalStyle = () => (
