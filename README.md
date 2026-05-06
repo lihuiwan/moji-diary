@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# 墨记
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个本地优先的日记应用。默认数据会保存在当前浏览器的 localStorage 里；开启 Supabase 后，可以登录并把日记同步到云端。
 
-Currently, two official plugins are available:
+## 本地运行
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 备份
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+左侧“备份”区域支持：
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 手动导出 JSON
+- 导入 JSON 恢复
+- 在支持 File System Access API 的浏览器里选择本地文件夹，应用会定期写入备份文件
+
+## Supabase 云同步
+
+1. 在 Supabase 新建项目。
+2. 打开 Supabase SQL Editor，执行 `supabase/schema.sql`。
+3. 在 Supabase Project Settings -> API 复制 Project URL 和 anon public key。
+4. 在 Netlify 的 Site configuration -> Environment variables 添加：
+
+```bash
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
+
+5. 重新部署 Netlify。
+6. 打开网站右下角“云同步”，注册或登录。登录后会合并本地和云端日记，后续修改会自动同步。
+
+个人日记通常足够使用 Supabase 免费额度。超过免费额度后才需要考虑付费。
