@@ -115,7 +115,11 @@ const login = async (email: string, password: string, signup = false) => {
   }
   setStatus(signup ? '正在注册...' : '正在登录...');
   const result = signup
-    ? await client.auth.signUp({ email, password })
+    ? await client.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin },
+    })
     : await client.auth.signInWithPassword({ email, password });
   if (result.error) {
     setStatus(`${signup ? '注册' : '登录'}失败：${result.error.message}`);
