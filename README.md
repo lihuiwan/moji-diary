@@ -2,7 +2,6 @@
 
 一个本地优先的日记应用。默认数据会保存在当前浏览器的 localStorage 里；开启 Supabase 后，可以登录并把日记同步到云端。
 <img width="1086" height="1448" alt="ChatGPT Image 2026年4月24日 19_43_05" src="https://github.com/user-attachments/assets/986e6314-d937-4009-98b8-36c647e4a3c2" />
-<img width="1800" height="766" alt="封面" src="https://github.com/user-attachments/assets/713c992d-3050-4dd9-812e-77e04d963128" />
 
 ## 本地运行
 
